@@ -10,29 +10,32 @@ let tree = App()
 let rootNode = createElement(tree)
 root.appendChild(rootNode)
 
-function addLine(history = []) {
-  const newTree = App(history)
+function updateTree(tree, newTree, history = []) {
   const patches = diff(tree, newTree)
 
   rootNode = patch(rootNode, patches)
-  tree = newTree
 
   var handleKeyDown = e => {
     if (e.which === 13) {
       e.preventDefault()
       document.removeEventListener('keydown', handleKeyDown)
+
       return processLine('ls')
-        .then(result => addLine(history.concat({
-          line: 'ls',
-          result,
-        })))
+        .then(function(result) {
+          const newHistory = history.concat({
+            line: 'ls',
+            result,
+          })
+
+          return updateTree(newTree, App(newHistory), newHistory)
+        })
     }
   }
 
   document.addEventListener('keydown', handleKeyDown)
 }
 
-addLine();
+updateTree(tree, App())
 
 function processLine(line) {
   return Promise.resolve('Hello world')
