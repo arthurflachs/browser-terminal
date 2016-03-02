@@ -1,0 +1,31 @@
+{
+  "name": "browser-terminal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "./bin/dev-server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arthurflachs/browser-terminal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arthurflachs/browser-terminal/issues"
+  },
+  "bin": {
+    "dev-server": "bin/dev-server.js"
+  },
+  "homepage": "https://github.com/arthurflachs/browser-terminal#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "ssh2": "^0.4.13"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.14",
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-hot-middleware": "^2.9.0"
+  }
+}
