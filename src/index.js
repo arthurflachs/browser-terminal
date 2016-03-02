@@ -10,29 +10,37 @@ let tree = App()
 let rootNode = createElement(tree)
 root.appendChild(rootNode)
 
+function makeKeydownListener(history) {
+  return function keydownListener(e) {
+    return processLine('ls')
+      .then(function(result) {
+        return history.concat({
+          line: 'ls',
+          result,
+        })
+      })
+  }
+}
+
 function updateTree(tree, newTree, history = []) {
   const patches = diff(tree, newTree)
-
   rootNode = patch(rootNode, patches)
 
-  var handleKeyDown = e => {
+  const keydownListener = makeKeydownListener(history)
+
+  function onKeydown(e) {
     if (e.which === 13) {
       e.preventDefault()
-      document.removeEventListener('keydown', handleKeyDown)
 
-      return processLine('ls')
-        .then(function(result) {
-          const newHistory = history.concat({
-            line: 'ls',
-            result,
-          })
-
-          return updateTree(newTree, App(newHistory), newHistory)
+      keydownListener(e)
+        .then(newHistory => updateTree(newTree, App(newHistory), newHistory))
+        .then(function() {
+          document.removeEventListener('keydown', onKeydown)
         })
     }
   }
 
-  document.addEventListener('keydown', handleKeyDown)
+  document.addEventListener('keydown', onKeydown)
 }
 
 updateTree(tree, App())
