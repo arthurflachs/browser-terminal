@@ -1,48 +1,17 @@
-import h from 'virtual-dom/h'
 import createElement from 'virtual-dom/create-element'
 import patch from 'virtual-dom/patch'
 import diff from 'virtual-dom/diff'
 
+import { App } from './Components'
+
 const root = document.body
 
-function render(history = []) {
-  return h('div', {
-    class: 'terminal',
-  }, history.reduce((x, { line, result }) => {
-    return x.concat([
-      makeLine(line),
-      makeResult(result),
-    ]);
-  }, []).concat(makeLine({ editable: true })))
-}
-
-function makeResult(result = "") {
-  return h('div', {}, [ result ])
-}
-
-function makeLine({ prefix , line, editable } = {}) {
-  prefix = prefix || "arthur@localhost ~$ "
-
-  return h('div', {}, [
-
-    h('span', {
-      className: 'prefix',
-    }, [prefix]),
-
-    h('span', {
-      className: 'input',
-      contentEditable: !!editable,
-    }, [line]),
-
-  ])
-}
-
-let tree = render()
+let tree = App()
 let rootNode = createElement(tree)
 root.appendChild(rootNode)
 
 function addLine(history = []) {
-  const newTree = render(history)
+  const newTree = App(history)
   const patches = diff(tree, newTree)
 
   rootNode = patch(rootNode, patches)
