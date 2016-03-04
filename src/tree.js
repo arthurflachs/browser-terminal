@@ -7,11 +7,11 @@ function processLine(line) {
 }
 
 function makeKeydownListener(history) {
-  return function keydownListener(e) {
-    return processLine('ls')
+  return function keydownListener(e, command) {
+    return processLine(command)
       .then(function(result) {
         return history.concat({
-          line: 'ls',
+          line: command,
           result,
         })
       })
@@ -31,7 +31,12 @@ export function updateTree(vdom, newTree, history = []) {
     if (e.which === 13) {
       e.preventDefault()
 
-      keydownListener(e)
+      // Retrieve value of the input
+      // TODO: needs refactoring
+      const inputs = document.getElementsByClassName('input')
+      const command = inputs[inputs.length - 1].innerHTML
+
+      keydownListener(e, command)
         .then(newHistory => updateTree(newDom, App(newHistory), newHistory))
         .then(function() {
           document.removeEventListener('keydown', onKeydown)

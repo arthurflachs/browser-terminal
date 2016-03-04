@@ -11,4 +11,4 @@ const vdom = {
 }
 root.appendChild(vdom.node)
 
-updateTree(vdom, App())
+updateTree(null, tree)
