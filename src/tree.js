@@ -2,8 +2,19 @@ import patch from 'virtual-dom/patch'
 import diff from 'virtual-dom/diff'
 import { App } from './Components'
 
+var url = 'http://localhost:8081'
+
 function processLine(line) {
-  return Promise.resolve('Hello world')
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      command: line.split("\n")
+    })
+  }).then(res => res.json())
+  .then(json => json.result)
 }
 
 function makeKeydownListener(history) {
