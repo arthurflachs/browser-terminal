@@ -5,7 +5,7 @@ export function App(history = []) {
     class: 'terminal',
   }, history.reduce((x, { line, result }) => {
     return x.concat([
-      Line(line),
+      Line({ line: line }),
       Result(result),
     ]);
   }, []).concat(Line({ editable: true })))
